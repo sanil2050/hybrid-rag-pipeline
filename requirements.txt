@@ -1,0 +1,30 @@
+# Core LangChain Framework
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-text-splitters>=0.3.0
+
+# Vector Database & Retrieval
+pinecone>=5.0.0
+pinecone-text>=0.11.0
+langchain-pinecone>=0.2.0
+rank-bm25>=0.2.2
+
+# Embeddings & Hugging Face
+sentence-transformers>=3.0.0
+transformers>=4.40.0
+langchain-huggingface>=0.1.0
+torch>=2.2.0
+
+# LLM & Generation (Google Gemini)
+google-generativeai>=0.8.0
+langchain-google-genai>=2.0.0
+
+# PDF Processing & Utilities
+pypdf>=5.0.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+
+# Notebook Environment
+jupyter>=1.0.0
+ipykernel>=6.29.0
