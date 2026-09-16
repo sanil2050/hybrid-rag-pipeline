@@ -21,7 +21,7 @@ flowchart TD
 
     User([User Query]) --> Step5[5. Hybrid Search Retriever\nPineconeHybridSearchRetriever]
     Step4 --> Step5
-    Step5 --> Step6[6. Google Gemini LLM\ngemini-1.5-flash Context Augmentation]
+    Step5 --> Step6[6. Google Gemini LLM\ngemini-2.5-flash Context Augmentation]
     Step6 --> Output([Final Grounded Answer])
 ```
 
