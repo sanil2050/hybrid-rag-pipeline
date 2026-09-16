@@ -10,36 +10,19 @@ Standard RAG typically relies either only on dense vector embeddings (which capt
 
 This pipeline implements **Hybrid Search** to achieve the best of both worlds:
 
-```
-                                  ┌───────────────────────────┐
-                                  │      User Documents       │
-                                  │     (AI Knowledge PDFs)   │
-                                  └─────────────┬─────────────┘
-                                                │
-                                    [Text Chunking & Cleaning]
-                                                │
-                      ┌─────────────────────────┴─────────────────────────┐
-                      ▼                                                   ▼
-         [Dense Embeddings]                                      [Sparse Embeddings]
-    (all-MiniLM-L6-v2, 384-dim)                                  (BM25 Token Frequencies)
-                      │                                                   │
-                      └─────────────────────────┬─────────────────────────┘
-                                                ▼
-                               ┌─────────────────────────────────┐
-                               │   Pinecone Serverless Index     │
-                               │     (metric: dotproduct)        │
-                               └────────────────┬────────────────┘
-                                                │
-User Query ──► [PineconeHybridSearchRetriever] ◄┘
-                          │
-                   (Ranked Context)
-                          ▼
-             ┌──────────────────────────┐
-             │   Google Gemini LLM      │
-             │   (gemini-1.5-flash)     │
-             └────────────┬─────────────┘
-                          ▼
-                    Final Answer
+```mermaid
+flowchart TD
+    Docs([User Documents\nAI Knowledge PDFs]) --> Step1[1. Document Ingestion\nPDF Text Extraction & Cleaning]
+    Step1 --> Step2[2. Document Chunking\nRecursiveCharacterTextSplitter]
+    Step2 --> Step3A[3a. Dense Embeddings\nall-MiniLM-L6-v2 - 384-dim]
+    Step2 --> Step3B[3b. Sparse Embeddings\nBM25 Token Statistics]
+    Step3A --> Step4[4. Pinecone Serverless Index\nHybrid Vector Store - dotproduct]
+    Step3B --> Step4
+
+    User([User Query]) --> Step5[5. Hybrid Search Retriever\nPineconeHybridSearchRetriever]
+    Step4 --> Step5
+    Step5 --> Step6[6. Google Gemini LLM\ngemini-1.5-flash Context Augmentation]
+    Step6 --> Output([Final Grounded Answer])
 ```
 
 - **Dense Retrieval**: `sentence-transformers/all-MiniLM-L6-v2` (384 dimensions) via `langchain-huggingface`.
